@@ -3,9 +3,12 @@ import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 
 import { useSelector } from "react-redux";
 
-export const SinglePostPage = ({ match }) => {
+/*Components*/
+import { EditPostForm } from '../../../components/EditPostForm';
 
-    const { postId } = match.params
+export const SinglePostPage = ({ route, navigation }) => {
+
+    const { postId } = route.params
 
     const post = useSelector(state =>
         state.posts.find(post => post.id === postId)
@@ -15,11 +18,12 @@ export const SinglePostPage = ({ match }) => {
         <View>
             {!post
                 ? <Text>PostNotFound</Text>
-                : <Text>post</Text>
+                : <View>
+                    <Text>{post.content}</Text>
+                    <EditPostForm postId={postId} />
+                </View>
             }
 
         </View>
-
-
     )
 }
