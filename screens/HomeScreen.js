@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux'
 
+/*date-fns */
+import { parseISO, formatDistanceToNow } from 'date-fns'
+/*REDUX */
+import { useSelector, useDispatch } from 'react-redux'
 import {
     decrement,
     increment,
@@ -10,6 +13,7 @@ import {
 } from '../src/features/counter/counterSlice';
 
 import { postAdded } from '../src/features/posts/postsSlice';
+
 
 /*Components*/
 import { PostAuthor } from '../src/features/posts/postAuthor';
@@ -23,9 +27,9 @@ const PostsList = (props) => {
     const users = useSelector(state => state.users)
 
     //ordering posts 
-    //const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
-    const orderedPosts = [...posts].reverse()
- 
+    const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
+    //const orderedPosts = [...posts].reverse()
+
 
     const addPost = () => {
         const name = 'new post with modified createslice';
@@ -47,7 +51,18 @@ const PostsList = (props) => {
         </TouchableOpacity>
     ))
 
+    const TimeAgo = ( timestamp ) => {
+        let timeAgo =''
+        if(timestamp){
+            const date = parseISO(timestamp)
+            const timePeriod = formatDistanceToNow(date)
+            timeAgo = timePeriod
+        }
+        return timeAgo;
+    }
+
     const renderPosts = ({ item, index }) => {
+        const timeAgoRender = TimeAgo(item.date)
         return (
             <View style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 200, padding: 5 }}>
                 <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>{item.name}</Text>
@@ -56,6 +71,9 @@ const PostsList = (props) => {
                     <PostAuthor userId={item.user} />
                     : <PostAuthor userId={''} />
                 }
+                <Text>
+                    created: {timeAgoRender} ago 
+                </Text>
                 <Button title="See the Post" onPress={() => goToPostPage(item)} />
             </View>
         )
