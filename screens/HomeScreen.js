@@ -17,9 +17,9 @@ import { postAdded } from '../src/features/posts/postsSlice';
 
 /*Components*/
 import { PostAuthor } from '../src/features/posts/postAuthor';
+import { ReactionButtons } from '../components/ReactionButtons';
+
 const PostsList = (props) => {
-
-
     const dispatch = useDispatch()
     const [userId, setUserId] = useState('');
     const navigation = props.navigation
@@ -64,7 +64,7 @@ const PostsList = (props) => {
     const renderPosts = ({ item, index }) => {
         const timeAgoRender = TimeAgo(item.date)
         return (
-            <View style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 200, padding: 5 }}>
+            <View style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 300, padding: 5 }}>
                 <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>{item.name}</Text>
                 <Text >{item.content}</Text>
                 {item.user ?
@@ -74,12 +74,13 @@ const PostsList = (props) => {
                 <Text>
                     created: {timeAgoRender} ago 
                 </Text>
+                <ReactionButtons post={item}/>
                 <Button title="See the Post" onPress={() => goToPostPage(item)} />
             </View>
         )
     }
     return (
-        <View style={{ flex: 3 }}>
+        <View style={{ flex: 3,alignItems:'center' }}>
             <View style={{ margin: 10 }}>
                 {selectUser}
             </View>
@@ -91,7 +92,7 @@ const PostsList = (props) => {
             {
                 userId != ''
                     ? <Button title="add new post" onPress={() => addPost()} />
-                    : <Button title="add new post" color='grey' />
+                    : <Button title="add new post" disabled/>
             }
 
         </View>
