@@ -18,12 +18,16 @@ import { PostAuthor } from '../src/features/posts/postAuthor';
 import { ReactionButtons } from '../components/ReactionButtons';
 import { postAdded } from '../src/features/posts/postsSlice';
 
+/*selector functions*/
+import { selectAllPosts } from '../src/features/posts/postsSlice';
+
 const PostsList = (props) => {
     const dispatch = useDispatch()
     const navigation = props.navigation
 
     const [userId, setUserId] = useState('');
-    const posts = useSelector(state => state.posts)
+    // const posts = useSelector(state => state.posts)
+    const posts = useSelector(selectAllPosts)
     const users = useSelector(state => state.users)
     const name = 'new post with modified createslice';
     const content = "my component doesnt have to worry about payload"
@@ -101,7 +105,7 @@ const Counter = ({ route, navigation }) => {
     const incrementPress = () => {
         dispatch(increment())
     }
-    
+
     const decrementPress = () => {
         dispatch(decrement())
     }

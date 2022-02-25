@@ -6,13 +6,18 @@ import { useSelector } from "react-redux";
 /*Components*/
 import { EditPostForm } from '../../../components/EditPostForm';
 
+/*selector functions*/
+import { selectPostById } from './postsSlice';
+
 export const SinglePostPage = ({ route, navigation }) => {
 
     const { postId } = route.params
-
-    const post = useSelector(state =>
-        state.posts.find(post => post.id === postId)
-    )
+    
+    //old style 
+    // const post = useSelector(state =>
+    //     state.posts.find(post => post.id === postId)
+    // )
+    const post = useSelector(state => selectPostById(state,postId))
 
     return (
         <View>
