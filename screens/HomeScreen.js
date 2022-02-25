@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity } from 'reac
 
 /*date-fns */
 import { parseISO, formatDistanceToNow } from 'date-fns'
+
 /*REDUX */
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -12,33 +13,28 @@ import {
     selectCount,
 } from '../src/features/counter/counterSlice';
 
-import { postAdded } from '../src/features/posts/postsSlice';
-
-
 /*Components*/
 import { PostAuthor } from '../src/features/posts/postAuthor';
 import { ReactionButtons } from '../components/ReactionButtons';
+import { postAdded } from '../src/features/posts/postsSlice';
 
 const PostsList = (props) => {
     const dispatch = useDispatch()
-    const [userId, setUserId] = useState('');
     const navigation = props.navigation
+
+    const [userId, setUserId] = useState('');
     const posts = useSelector(state => state.posts)
     const users = useSelector(state => state.users)
-
+    const name = 'new post with modified createslice';
+    const content = "my component doesnt have to worry about payload"
     //ordering posts 
     const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
-    //const orderedPosts = [...posts].reverse()
-
 
     const addPost = () => {
-        const name = 'new post with modified createslice';
-        const content = "my component doesnt have to worry about payload"
-        dispatch(
-            postAdded(name, content, userId)
-        )
+        dispatch(postAdded(name, content, userId))
         setUserId('')
     }
+
     const goToPostPage = (post) => {
         navigation.navigate('SinglePostPage', {
             postId: post.id
@@ -51,9 +47,9 @@ const PostsList = (props) => {
         </TouchableOpacity>
     ))
 
-    const TimeAgo = ( timestamp ) => {
-        let timeAgo =''
-        if(timestamp){
+    const TimeAgo = (timestamp) => {
+        let timeAgo = ''
+        if (timestamp) {
             const date = parseISO(timestamp)
             const timePeriod = formatDistanceToNow(date)
             timeAgo = timePeriod
@@ -72,15 +68,15 @@ const PostsList = (props) => {
                     : <PostAuthor userId={''} />
                 }
                 <Text>
-                    created: {timeAgoRender} ago 
+                    created: {timeAgoRender} ago
                 </Text>
-                <ReactionButtons post={item}/>
+                <ReactionButtons post={item} />
                 <Button title="See the Post" onPress={() => goToPostPage(item)} />
             </View>
         )
     }
     return (
-        <View style={{ flex: 3,alignItems:'center' }}>
+        <View style={{ flex: 3, alignItems: 'center' }}>
             <View style={{ margin: 10 }}>
                 {selectUser}
             </View>
@@ -92,9 +88,8 @@ const PostsList = (props) => {
             {
                 userId != ''
                     ? <Button title="add new post" onPress={() => addPost()} />
-                    : <Button title="add new post" disabled/>
+                    : <Button title="add new post" disabled />
             }
-
         </View>
     )
 
@@ -106,6 +101,7 @@ const Counter = ({ route, navigation }) => {
     const incrementPress = () => {
         dispatch(increment())
     }
+    
     const decrementPress = () => {
         dispatch(decrement())
     }

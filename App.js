@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react'
 
+import React from 'react'
 
 /*Redux*/
 import { Provider } from 'react-redux';
@@ -10,14 +9,11 @@ import store from './src/store';
 import Navigation from './navigation/Navigation';
 
 function App() {
-
   return (
     <Provider store={store}>
       <Navigation />
     </Provider>
   );
 }
-
-
 
 export default App

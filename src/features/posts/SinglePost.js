@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { useSelector } from "react-redux";
 
@@ -23,7 +23,6 @@ export const SinglePostPage = ({ route, navigation }) => {
                     <EditPostForm postId={postId} />
                 </View>
             }
-
         </View>
     )
 }
