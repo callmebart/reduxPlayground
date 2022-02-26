@@ -27,7 +27,7 @@ const initialState = {
 }
 
 export const fetchPosts = createAsyncThunk('posts/getPosts', async () => {
-    const response = await fetch('http://192.168.1.9:3000/getUsers', {
+    await fetch('http://192.168.1.9:3000/getUsers', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
