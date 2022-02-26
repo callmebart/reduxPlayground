@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity } from 'react-native';
 
 /*date-fns */
@@ -19,9 +19,12 @@ import { ReactionButtons } from '../components/ReactionButtons';
 import { postAdded } from '../src/features/posts/postsSlice';
 
 /*selector functions*/
-import { selectAllPosts } from '../src/features/posts/postsSlice';
+import { selectAllPosts, fetchPosts } from '../src/features/posts/postsSlice';
 
 const PostsList = (props) => {
+
+
+
     const dispatch = useDispatch()
     const navigation = props.navigation
 
@@ -33,6 +36,17 @@ const PostsList = (props) => {
     const content = "my component doesnt have to worry about payload"
     //ordering posts 
     const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
+
+
+    const postStatus = useSelector(state => state.posts.status)
+    useEffect(() => {
+        if (postStatus === 'idle') {
+            dispatch(fetchPosts())
+        }
+    }, [])
+    useEffect(() => {
+
+    }, [])
 
     const addPost = () => {
         dispatch(postAdded(name, content, userId))

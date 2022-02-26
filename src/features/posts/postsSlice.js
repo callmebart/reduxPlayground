@@ -1,5 +1,7 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit';
 import { sub } from 'date-fns';
+import axios from 'axios';
+
 
 // const initialState = [
 //     {
@@ -23,6 +25,21 @@ const initialState = {
     status: 'idle',
     error: null
 }
+
+export const fetchPosts = createAsyncThunk('posts/getPosts', async () => {
+    const response = await fetch('http://192.168.1.9:3000/getUsers', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        }
+    })
+        .then((response) =>{ return response.json()})
+        .catch((error) => {
+            console.error(error);
+        });
+    
+})
 
 const postsSlice = createSlice({
     name: 'posts',
