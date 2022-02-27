@@ -35,8 +35,8 @@ const PostsList = (props) => {
     const name = 'new post with modified createslice';
     const content = "my component doesnt have to worry about payload"
     //ordering posts 
-    const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
-
+    //const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
+    const orderedPosts = posts
 
     const postStatus = useSelector(state => state.posts.status)
     useEffect(() => {
@@ -44,9 +44,7 @@ const PostsList = (props) => {
             dispatch(fetchPosts())
         }
     }, [])
-    useEffect(() => {
 
-    }, [])
 
     const addPost = () => {
         dispatch(postAdded(name, content, userId))

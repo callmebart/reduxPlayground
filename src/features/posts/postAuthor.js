@@ -7,6 +7,5 @@ export const PostAuthor = (props) => {
     state.users.find(user => user.id === props.userId)
   )
 
-
   return <Text>author : {author ? author.name : 'unknown author'}</Text>
 }

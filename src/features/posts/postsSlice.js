@@ -1,6 +1,5 @@
 import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit';
 import { sub } from 'date-fns';
-import axios from 'axios';
 
 
 // const initialState = [
@@ -27,18 +26,21 @@ const initialState = {
 }
 
 export const fetchPosts = createAsyncThunk('posts/getPosts', async () => {
-    await fetch('http://192.168.1.9:3000/getUsers', {
+   const res = await fetch('http://192.168.1.9:3000/getPosts', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         }
     })
-        .then((response) =>{ return response.json()})
-        .catch((error) => {
-            console.error(error);
-        });
-    
+        // .then((response) =>{   
+        //     return response.json()
+        // })
+        // .catch((error) => {
+        //     console.error(error);
+        // });
+        
+    return res.json();
 })
 
 const postsSlice = createSlice({
@@ -80,7 +82,22 @@ const postsSlice = createSlice({
                 existingPost.reactions[reaction]++
             }
         }
-    }
+    },
+    extraReducers(builder) {
+        builder
+          .addCase(fetchPosts.pending, (state, action) => {
+            state.status = 'loading'
+          })
+          .addCase(fetchPosts.fulfilled, (state, action) => {
+            state.status = 'succeeded'
+            // Add any fetched posts to the array
+            state.posts = state.posts.concat(action.payload)
+          })
+          .addCase(fetchPosts.rejected, (state, action) => {
+            state.status = 'failed'
+            state.error = action.error.message
+          })
+      }
 })
 
 export const { reactionAdded, postAdded, postUpdated } = postsSlice.actions
