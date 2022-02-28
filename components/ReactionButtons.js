@@ -17,8 +17,10 @@ const reactionEmojis = {
 
 //by using {post} instead of (props) dont have to write props.post
 export const ReactionButtons = ({post}) => {
+
     const dispatch = useDispatch()
     const reactionButtons = Object.entries(reactionEmojis).map(([name, emoji]) => {
+       
         return (
             <TouchableOpacity
                 key={name}

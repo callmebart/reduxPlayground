@@ -1,4 +1,5 @@
-var express = require("express")
+var express = require("express");
+
 
 var app = express()
 
@@ -28,9 +29,15 @@ var posts = [
 
 
 app.post("/getPosts", function (req, res) {
-    console.log(posts)
+    //console.log(posts)
     res.send(JSON.stringify(posts));
 })
+
+app.post("/addPost", function(req, res) {
+    var data = req.body;
+    posts.push(data)
+    res.send(JSON.stringify(posts));
+  });
 
 
 app.get("/", function (req, res) {

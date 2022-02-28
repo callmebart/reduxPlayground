@@ -19,6 +19,22 @@ import { sub } from 'date-fns';
 // ]
 
 //v2
+/*fetch('http://192.168.1.10:3000/addPost', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                login: login,
+            })
+        }).then((response) => response.json())
+            .then((responseJson) => {
+                this.that.setState({ tab: responseJson })
+            })
+            .catch((error) => {
+                console.error(error);
+            }); */
 const initialState = {
     posts: [],
     status: 'idle',
@@ -33,15 +49,32 @@ export const fetchPosts = createAsyncThunk('posts/getPosts', async () => {
             'Content-Type': 'application/json',
         }
     })
-        // .then((response) =>{   
-        //     return response.json()
-        // })
-        // .catch((error) => {
-        //     console.error(error);
-        // });
         
     return res.json();
 })
+
+export const addNewPost = createAsyncThunk('posts/addNewPost',
+    async initialPost =>{
+      
+        const response = await fetch('http://192.168.1.9:3000/addPost', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id: nanoid(),
+                date: new Date(),
+                name:initialPost.name,
+                content:initialPost.content,
+                user: initialPost.user,
+                reactions: { thumbsUp: 0, hooray: 0, heart: 0, rocket: 0, eyes: 0 },
+            })
+        })
+            return response.json()
+    }
+  
+)
 
 const postsSlice = createSlice({
     name: 'posts',
@@ -96,6 +129,9 @@ const postsSlice = createSlice({
           .addCase(fetchPosts.rejected, (state, action) => {
             state.status = 'failed'
             state.error = action.error.message
+          })
+          .addCase(addNewPost.fulfilled,(state,action)=>{    
+            state.posts = action.payload
           })
       }
 })

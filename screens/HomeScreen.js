@@ -17,9 +17,12 @@ import {
 import { PostAuthor } from '../src/features/posts/postAuthor';
 import { ReactionButtons } from '../components/ReactionButtons';
 import { postAdded } from '../src/features/posts/postsSlice';
+import { addNewPost } from '../src/features/posts/postsSlice';
 
 /*selector functions*/
 import { selectAllPosts, fetchPosts } from '../src/features/posts/postsSlice';
+
+
 
 const PostsList = (props) => {
 
@@ -36,7 +39,7 @@ const PostsList = (props) => {
     const content = "my component doesnt have to worry about payload"
     //ordering posts 
     //const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
-    const orderedPosts = posts
+
 
     const postStatus = useSelector(state => state.posts.status)
     useEffect(() => {
@@ -45,10 +48,11 @@ const PostsList = (props) => {
         }
     }, [])
 
-
-    const addPost = () => {
-        dispatch(postAdded(name, content, userId))
+    const addPost = async () => {
+        // dispatch(postAdded(name, content, userId))
+        await dispatch(addNewPost({ name, content, user: userId })).unwrap()
         setUserId('')
+
     }
 
     const goToPostPage = (post) => {
@@ -58,7 +62,7 @@ const PostsList = (props) => {
     }
 
     const selectUser = users.map(user => (
-        <TouchableOpacity style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 200, padding: 5 }} onPress={() => setUserId(user.id)} >
+        <TouchableOpacity key={user.id} style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 200, padding: 5 }} onPress={() => setUserId(user.id)} >
             <Text>{user.name}</Text>
         </TouchableOpacity>
     ))
@@ -75,8 +79,9 @@ const PostsList = (props) => {
 
     const renderPosts = ({ item, index }) => {
         const timeAgoRender = TimeAgo(item.date)
+
         return (
-            <View style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 300, padding: 5 }}>
+            <View key={item.id} style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 300, padding: 5 }}>
                 <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>{item.name}</Text>
                 <Text >{item.content}</Text>
                 {item.user ?
@@ -90,6 +95,8 @@ const PostsList = (props) => {
                 <Button title="See the Post" onPress={() => goToPostPage(item)} />
             </View>
         )
+
+
     }
     return (
         <View style={{ flex: 3, alignItems: 'center' }}>
@@ -97,7 +104,7 @@ const PostsList = (props) => {
                 {selectUser}
             </View>
             <FlatList
-                data={orderedPosts}
+                data={posts}
                 renderItem={renderPosts}
                 keyExtractor={(item) => item.id}
             />
