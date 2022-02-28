@@ -131,7 +131,8 @@ const postsSlice = createSlice({
             state.error = action.error.message
           })
           .addCase(addNewPost.fulfilled,(state,action)=>{    
-            state.posts = action.payload
+            // state.posts = action.payload if i get whole arry of posts or
+            state.posts.push(action.payload) // if the server passed "data" not "posts" arry
           })
       }
 })

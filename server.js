@@ -36,7 +36,9 @@ app.post("/getPosts", function (req, res) {
 app.post("/addPost", function(req, res) {
     var data = req.body;
     posts.push(data)
-    res.send(JSON.stringify(posts));
+    //sending posts = whole arry passed 
+    //sending data = only one post 
+    res.send(JSON.stringify(data));
   });
 
 
