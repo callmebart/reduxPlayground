@@ -16,6 +16,7 @@ import { addNewPost } from '../src/features/posts/postsSlice';
 
 /*selector functions*/
 import { selectAllPosts, fetchPosts } from '../src/features/posts/postsSlice';
+import { fetchNotifications, selectAllNotifications } from '../src/notifications/notificationsSlice';
 
 
 export const PostsList = (props) => {
@@ -31,14 +32,18 @@ export const PostsList = (props) => {
     const content = "my component doesnt have to worry about payload"
     //ordering posts 
     //const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
-
+    const notifications = useSelector(selectAllNotifications)
+   
 
     const postStatus = useSelector(state => state.posts.status)
     useEffect(() => {
         if (postStatus === 'idle') {
             dispatch(fetchPosts())
+           
         }
+        dispatch(fetchNotifications())
     }, [])
+
 
     const addPost = async () => {
         // dispatch(postAdded(name, content, userId))

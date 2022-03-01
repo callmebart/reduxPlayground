@@ -27,15 +27,36 @@ var posts = [
 
 ];
 
+var notifications = [
+    {
+        id:0,
+        name: 'New Post Added',
+        date: new Date(),
+        user:'1',
+    }
+]
+
 
 app.post("/getPosts", function (req, res) {
     //console.log(posts)
     res.send(JSON.stringify(posts));
 })
+app.post("/getNotifications", function (req, res) {
+    console.log(notifications)
+    res.send(JSON.stringify(notifications));
+})
 
 app.post("/addPost", function(req, res) {
     var data = req.body;
     posts.push(data)
+    //sending posts = whole arry passed 
+    //sending data = only one post 
+    res.send(JSON.stringify(data));
+  });
+
+  app.post("/addNotification", function(req, res) {
+    var data = req.body;
+    notifications.push(data)
     //sending posts = whole arry passed 
     //sending data = only one post 
     res.send(JSON.stringify(data));
