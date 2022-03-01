@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { FlatList, Text, View,Button } from 'react-native';
 
 /*Redux Selectors*/
-import { selectAllPosts } from "../posts/postsSlice";
+import { selectAllPosts, selectPostByUser } from "../posts/postsSlice";
 import { selectUserById } from "./usersSlice";
 import { parseISO, formatDistanceToNow } from 'date-fns'
 
@@ -14,10 +14,13 @@ export const UserPage = ({ route, navigation }) => {
 
     const userId = route.params.userId
     const user = useSelector(state => selectUserById(state, userId))
-    const postsForUser = useSelector(state => {
-        const allPosts = useSelector(selectAllPosts)
-        return allPosts.filter(post => post.user === userId)
-    })
+    // const postsForUser = useSelector(state => {
+    //     const allPosts = useSelector(selectAllPosts)
+    //     return allPosts.filter(post => post.user === userId)
+    // })
+    
+    //more efficient 
+    const postsForUser = useSelector(state=>selectPostByUser(state,userId))
     console.log(postsForUser)
 
     const TimeAgo = (timestamp) => {

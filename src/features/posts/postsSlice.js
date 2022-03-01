@@ -1,4 +1,4 @@
-import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, nanoid, createAsyncThunk,createSelector } from '@reduxjs/toolkit';
 import { sub } from 'date-fns';
 
 
@@ -150,3 +150,9 @@ export const selectAllPosts = state => state.posts.posts
 //we used that already in "existing post cases"
 //export const selectPostById = (state, postId) => state.posts.find(post => post.id === postId) 
 export const selectPostById = (state, postId) => state.posts.posts.find(post => post.id === postId)
+
+//more efficent with createSelector 'memoized' data
+export const selectPostByUser = createSelector(
+    [selectAllPosts,(state,userId)=>userId],
+    (posts,userId) =>posts.filter(post => post.user === userId)
+)
