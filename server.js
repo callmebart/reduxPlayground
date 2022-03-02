@@ -38,7 +38,7 @@ var notifications = [
 
 
 app.post("/getPosts", function (req, res) {
-    //console.log(posts)
+    console.log("posts req:",posts)
     res.send(JSON.stringify(posts));
 })
 app.post("/getNotifications", function (req, res) {

@@ -19,22 +19,7 @@ import { sub } from 'date-fns';
 // ]
 
 //v2
-/*fetch('http://192.168.1.10:3000/addPost', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                login: login,
-            })
-        }).then((response) => response.json())
-            .then((responseJson) => {
-                this.that.setState({ tab: responseJson })
-            })
-            .catch((error) => {
-                console.error(error);
-            }); */
+
 const initialState = {
     posts: [],
     status: 'idle',

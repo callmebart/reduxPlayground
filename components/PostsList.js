@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import {  Text, View, Button, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react'
+import { Text, View, Button, FlatList, TouchableOpacity } from 'react-native';
 
 /*date-fns */
 import { parseISO, formatDistanceToNow } from 'date-fns'
@@ -16,10 +16,35 @@ import { addNewPost } from '../src/features/posts/postsSlice';
 
 /*selector functions*/
 import { selectAllPosts, fetchPosts } from '../src/features/posts/postsSlice';
-import { fetchNotifications, selectAllNotifications } from '../src/notifications/notificationsSlice';
+import { fetchNotifications, selectAllNotifications } from '../src/features/notifications/notificationsSlice';
 
+
+/*RTK QUERY HOOKS*/
+import { useGetPostsQuery } from '../src/features/api/apiSlice';
 
 export const PostsList = (props) => {
+
+    const {
+        data: postsRTK = [],
+        isLoading,
+        isFetching,
+        isSuccess,
+        IsError,
+        error,
+    } = useGetPostsQuery({
+        pollingInterval: 3000,
+        refetchOnMountOrArgChange: true,
+        skip: false,
+    })
+
+    const sortedPosts = useMemo(() => {
+        const sortedPosts = postsRTK.slice()
+        // Sort posts in descending chronological order
+        sortedPosts.reverse()
+        return sortedPosts
+    }, [postsRTK])
+
+
 
     const dispatch = useDispatch()
     const navigation = props.navigation
@@ -33,16 +58,17 @@ export const PostsList = (props) => {
     //ordering posts 
     //const orderedPosts = posts.slice().sort((a, b) => b.date.localeCompare(a.date))
     const notifications = useSelector(selectAllNotifications)
-   
+
 
     const postStatus = useSelector(state => state.posts.status)
     useEffect(() => {
         if (postStatus === 'idle') {
-            dispatch(fetchPosts())
-           
+             dispatch(fetchPosts())
+
         }
-        dispatch(fetchNotifications())
+       // dispatch(fetchNotifications())
     }, [])
+
 
 
     const addPost = async () => {
@@ -59,7 +85,7 @@ export const PostsList = (props) => {
     }
     const showUsers = () => {
         navigation.navigate('UsersList', {
-            userId:userId
+            userId: userId
         })
     }
 
@@ -101,13 +127,39 @@ export const PostsList = (props) => {
 
 
     }
+
+    const poststest = sortedPosts.map(test => (
+        <TouchableOpacity key={test.id} style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 200, padding: 5 }} >
+            <Text>{test.name}</Text>
+        </TouchableOpacity>
+    ))
     return (
         <View style={{ flex: 3, alignItems: 'center' }}>
             <View style={{ margin: 10 }}>
                 {selectUser}
                 <Button title="Show Users" onPress={() => showUsers()} />
+                {
+                    isFetching ? <Text>Fetching..</Text> : <Text>not Fetching</Text>
+                }
+                {
+                    isLoading ? <Text>Loading..</Text> : <Text>not loading</Text>
+                }
+                {
+                    IsError ? <Text>{error}</Text> : <Text>no errors</Text>
+                }
+                {
+                    isSuccess ? <Text>ok</Text> : <Text>not working</Text>
+                }
+                {
+                    postsRTK.length>0?
+                    poststest
+                    :
+                    <Text>brak postów</Text>
+
+                }
+
             </View>
-          
+
             <FlatList
                 data={posts}
                 renderItem={renderPosts}
@@ -118,7 +170,7 @@ export const PostsList = (props) => {
                     ? <Button title="add new post" onPress={() => addPost()} />
                     : <Button title="add new post" disabled />
             }
-           
+
         </View>
     )
 
