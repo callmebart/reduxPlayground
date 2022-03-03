@@ -7,6 +7,7 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     // All of our requests will have URLs starting with 'http://192.168.1.9:3000'
     baseQuery: fetchBaseQuery({ baseUrl: 'http://192.168.1.9:3000' }),
+    tagTypes:['Post'],//root tag names to automatic refresh cache
     // The "endpoints" represent operations and requests for this server
     endpoints: builder => ({
         // The `getPosts` endpoint is a "query" operation that returns data
@@ -19,18 +20,28 @@ export const apiSlice = createApi({
             //     }
             // })
             // ^-ok
-            query: () => ({ url: '/getPosts', method: 'POST' }) //ok
+            query: () => ({ url: '/getPosts', method: 'POST' }), //ok
             //query:()=>'/getPosts' not ok cause by default there is 'GET' method
+            providesTags: ['Post'] //describing data in that query enpoints
         }),
         getPost: builder.query({
             query: (postId) => ({ url: '/getPost',
              method: 'POST',
              body:{postId} //important without {} didnt work !
-         }) 
-          
-        })
+         }),       
+        }),
+        addNewPost: builder.mutation({
+            query: initialPost => ({
+              url: '/addPostMutation',
+              method: 'POST',
+              // Include the entire post object as the body of the request
+              body: initialPost
+            }),
+            invalidatesTags:['Post'],//mutation endpoints listing a set of 
+            //tags that are invalidated every time that mutation runs
+          })
     })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetPostsQuery, useGetPostQuery } = apiSlice
+export const { useGetPostsQuery, useGetPostQuery,useAddNewPostMutation } = apiSlice

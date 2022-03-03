@@ -21,16 +21,13 @@ export const SinglePostPage = ({ route, navigation }) => {
         isLoading,
         isError,
         isSuccess
-    } = useGetPostQuery(postId)
+    } = useGetPostQuery(postId) //RTK query
 
     //old style 
     // const post = useSelector(state =>
     //     state.posts.find(post => post.id === postId)
     // )
     const post = useSelector(state => selectPostById(state, postId))
-
-
-
 
     return (
         <View>

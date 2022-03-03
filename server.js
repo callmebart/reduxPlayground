@@ -62,6 +62,13 @@ app.post("/addPost", function(req, res) {
     res.send(JSON.stringify(data));
   });
 
+  app.post("/addPostMutation", function(req, res) {
+    var data = req.body;
+    console.log(data)
+    posts.push(data)
+    res.send(JSON.stringify(data));
+  });
+
   app.post("/addNotification", function(req, res) {
     var data = req.body;
     notifications.push(data)
