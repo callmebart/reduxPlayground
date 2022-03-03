@@ -41,6 +41,14 @@ app.post("/getPosts", function (req, res) {
     console.log("posts req:",posts)
     res.send(JSON.stringify(posts));
 })
+
+app.post("/getPost",function(req,res){
+    const postId = req.body.postId;
+    const selectedPost = posts.find(post=>post.id===postId)
+    console.log("selectedPost:",selectedPost)
+    res.send(JSON.stringify(selectedPost))
+})
+
 app.post("/getNotifications", function (req, res) {
     console.log(notifications)
     res.send(JSON.stringify(notifications));

@@ -19,10 +19,18 @@ export const apiSlice = createApi({
             //     }
             // })
             // ^-ok
-            query:()=>({url:'/getPosts',method:'POST'}) //ok
+            query: () => ({ url: '/getPosts', method: 'POST' }) //ok
+            //query:()=>'/getPosts' not ok cause by default there is 'GET' method
+        }),
+        getPost: builder.query({
+            query: (postId) => ({ url: '/getPost',
+             method: 'POST',
+             body:{postId} //important without {} didnt work !
+         }) 
+          
         })
     })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetPostsQuery } = apiSlice
+export const { useGetPostsQuery, useGetPostQuery } = apiSlice
