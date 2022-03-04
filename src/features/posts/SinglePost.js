@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View,Button } from 'react-native';
 
 import { useSelector } from "react-redux";
 
@@ -10,7 +10,7 @@ import { EditPostForm } from '../../../components/EditPostForm';
 import { selectPostById } from './postsSlice';
 
 /*RTK QUERY HOOKS*/
-import { useGetPostQuery } from '../api/apiSlice';
+import { useGetPostQuery,useEditPostMutation } from '../api/apiSlice';
 
 export const SinglePostPage = ({ route, navigation }) => {
 
@@ -18,10 +18,12 @@ export const SinglePostPage = ({ route, navigation }) => {
     const {
         data: postRTK,
         isFetching,
-        isLoading,
         isError,
         isSuccess
     } = useGetPostQuery(postId) //RTK query
+
+    
+    
 
     //old style 
     // const post = useSelector(state =>
@@ -46,8 +48,9 @@ export const SinglePostPage = ({ route, navigation }) => {
                         <Text>name:{postRTK.name}</Text>
                         <Text>content:{postRTK.content}</Text>
                     </View>
-                    : <Text>not working</Text>
+                    : <Text>not working</Text>                 
             }
+           
         </View>
     )
 }

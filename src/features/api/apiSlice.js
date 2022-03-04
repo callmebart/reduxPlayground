@@ -7,7 +7,7 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     // All of our requests will have URLs starting with 'http://192.168.1.9:3000'
     baseQuery: fetchBaseQuery({ baseUrl: 'http://192.168.1.9:3000' }),
-    tagTypes:['Post'],//root tag names to automatic refresh cache
+    tagTypes: ['Post'],//root tag names to automatic refresh cache we will when mutation is happening name doesnt matter
     // The "endpoints" represent operations and requests for this server
     endpoints: builder => ({
         // The `getPosts` endpoint is a "query" operation that returns data
@@ -25,23 +25,31 @@ export const apiSlice = createApi({
             providesTags: ['Post'] //describing data in that query enpoints
         }),
         getPost: builder.query({
-            query: (postId) => ({ url: '/getPost',
-             method: 'POST',
-             body:{postId} //important without {} didnt work !
-         }),       
+            query: (postId) => ({
+                url: '/getPost',
+                method: 'POST',
+                body: { postId } //important without {} didnt work !
+            }),
         }),
         addNewPost: builder.mutation({
             query: initialPost => ({
-              url: '/addPostMutation',
-              method: 'POST',
-              // Include the entire post object as the body of the request
-              body: initialPost
+                url: '/addPostByMutation',
+                method: 'POST',
+                // Include the entire post object as the body of the request
+                body: initialPost
             }),
-            invalidatesTags:['Post'],//mutation endpoints listing a set of 
+            invalidatesTags: ['Post'],//mutation endpoints listing a set of 
             //tags that are invalidated every time that mutation runs
-          })
+        }),
+        editPost: builder.mutation({
+            query: post => ({
+                url: '/editPostByMutation',
+                method: 'POST',
+                body: post
+            })
+        })
     })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetPostsQuery, useGetPostQuery,useAddNewPostMutation } = apiSlice
+export const { useGetPostsQuery, useGetPostQuery, useAddNewPostMutation,useEditPostMutation } = apiSlice

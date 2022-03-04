@@ -62,12 +62,22 @@ app.post("/addPost", function(req, res) {
     res.send(JSON.stringify(data));
   });
 
-  app.post("/addPostMutation", function(req, res) {
+  app.post("/addPostByMutation", function(req, res) {
     var data = req.body;
     console.log(data)
     posts.push(data)
     res.send(JSON.stringify(data));
   });
+
+  app.post("/editPostByMutation", function(req, res) {
+    var data = req.body
+    const postToEdit = posts.find(post=>post.id===data.id)
+    postToEdit.name = data.name
+    postToEdit.content = data.content
+    console.log("afterUpdate:",posts)
+    res.send(JSON.stringify(postToEdit));
+  });
+
 
   app.post("/addNotification", function(req, res) {
     var data = req.body;
