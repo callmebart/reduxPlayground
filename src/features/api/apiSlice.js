@@ -22,7 +22,12 @@ export const apiSlice = createApi({
             // ^-ok
             query: () => ({ url: '/getPosts', method: 'POST' }), //ok
             //query:()=>'/getPosts' not ok cause by default there is 'GET' method
-            providesTags: ['Post'] //describing data in that query enpoints
+            //providesTags: ['Post'] //describing data in that query enpoints
+            //to make refetch for specific id only 
+            providesTags: (result = [], error, arg) => [
+                'Post',
+                ...result.map(({ id }) => ({ type: 'Post', id }))
+              ]
         }),
         getPost: builder.query({
             query: (postId) => ({
@@ -30,6 +35,7 @@ export const apiSlice = createApi({
                 method: 'POST',
                 body: { postId } //important without {} didnt work !
             }),
+            providesTags: (result, error, arg) => [{ type: 'Post', id: arg }]//only for individual post id:arg cause data {postid}
         }),
         addNewPost: builder.mutation({
             query: initialPost => ({
@@ -46,10 +52,12 @@ export const apiSlice = createApi({
                 url: '/editPostByMutation',
                 method: 'POST',
                 body: post
-            })
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }]//refetch posts list and specfic field arg.id cause data post
         })
+        
     })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetPostsQuery, useGetPostQuery, useAddNewPostMutation,useEditPostMutation } = apiSlice
+export const { useGetPostsQuery, useGetPostQuery, useAddNewPostMutation, useEditPostMutation } = apiSlice
