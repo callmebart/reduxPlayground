@@ -27,6 +27,13 @@ var posts = [
 
 ];
 
+let users = [
+    { id: '0', name: 'Bartosz Batosiewicz' },
+    { id: '1', name: 'Jan Kowalski' },
+    { id: '2', name: 'Emily Rozmarynsky' },
+]
+
+
 var notifications = [
     {
         id:0,
@@ -35,6 +42,10 @@ var notifications = [
         user:'1',
     }
 ]
+app.post("/getUsers", function (req, res) {
+    console.log("users req:",users)
+    res.send(JSON.stringify(users));
+})
 
 
 app.post("/getPosts", function (req, res) {

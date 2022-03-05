@@ -27,7 +27,7 @@ export const apiSlice = createApi({
             providesTags: (result = [], error, arg) => [
                 'Post',
                 ...result.map(({ id }) => ({ type: 'Post', id }))
-              ]
+            ]
         }),
         getPost: builder.query({
             query: (postId) => ({
@@ -54,10 +54,23 @@ export const apiSlice = createApi({
                 body: post
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }]//refetch posts list and specfic field arg.id cause data post
+        }),
+
+
+        //USERS_QUERY_ENDPOINTS
+        getUsers: builder.query({
+            query: () => ({ url: '/getUsers', method: 'POST' })
         })
-        
+
     })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useGetPostsQuery, useGetPostQuery, useAddNewPostMutation, useEditPostMutation } = apiSlice
+export const {
+    useGetPostsQuery,
+    useGetPostQuery,
+    useAddNewPostMutation,
+    useEditPostMutation,
+
+    useGetUsersQuery,
+} = apiSlice
