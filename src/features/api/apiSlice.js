@@ -58,9 +58,10 @@ export const apiSlice = createApi({
 
 
         //USERS_QUERY_ENDPOINTS
-        getUsers: builder.query({
-            query: () => ({ url: '/getUsers', method: 'POST' })
-        })
+        // getUsers: builder.query({
+        //     query: () => ({ url: '/getUsers', method: 'POST' })
+        // })
+        //added injected endpoint in usersSlice.js
 
     })
 })
@@ -72,5 +73,5 @@ export const {
     useAddNewPostMutation,
     useEditPostMutation,
 
-    useGetUsersQuery,
+   // useGetUsersQuery, added injected endpoint in usersSlice.js
 } = apiSlice

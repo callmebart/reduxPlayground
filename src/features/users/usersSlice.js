@@ -23,6 +23,17 @@ export default usersSliece.reducer
 //     state.users.find(user => user.id === userId)
 
 /*RTK QUERY GETTING USERS*/
+//instead of building it apiSlice we can make it here and inject it 
+
+export const extendedApiSlice = apiSlice.injectEndpoints({
+    endpoints:builder=>({
+        getUsers:builder.query({
+            query:()=>({url:'/getUsers', method:'POST'})
+        })
+    })
+})
+export const {useGetUsersQuery} = extendedApiSlice
+
 //we are dispatching them in App.js 
 //with that stuff below we dont even need createSlice here because we got it from app cache 
 export const selectUsersResult = apiSlice.endpoints.getUsers.select()
