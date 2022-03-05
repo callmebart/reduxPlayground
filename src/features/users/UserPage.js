@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { FlatList, Text, View, Button } from 'react-native';
+
+/*REDUX */
+import { createSelector } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
-import { FlatList, Text, View,Button } from 'react-native';
 
 /*Redux Selectors*/
 import { selectAllPosts, selectPostByUser } from "../posts/postsSlice";
@@ -10,6 +13,10 @@ import { parseISO, formatDistanceToNow } from 'date-fns'
 import { PostAuthor } from "../posts/postAuthor";
 import { ReactionButtons } from "../../../components/ReactionButtons";
 
+/*RTK HOOKS */
+import { useGetPostsQuery } from "../api/apiSlice";
+
+
 export const UserPage = ({ route, navigation }) => {
 
     const userId = route.params.userId
@@ -18,10 +25,35 @@ export const UserPage = ({ route, navigation }) => {
     //     const allPosts = useSelector(selectAllPosts)
     //     return allPosts.filter(post => post.user === userId)
     // })
-    
+
     //more efficient 
-    const postsForUser = useSelector(state=>selectPostByUser(state,userId))
+    const postsForUser = useSelector(state => selectPostByUser(state, userId))
     console.log(postsForUser)
+
+
+    /*Getting from cache using RTK */
+    const selectPostsForUserRTK = useMemo(() => {
+        const emptyArry = []
+        //return unique selector for this page
+
+        return createSelector(
+            res => res.data,
+            (res, userId) => userId,
+            (data, userId) => data?.filter(post => post.user === userId) ?? emptyArry
+        )
+    })
+
+    const { postsForUserRTK } = useGetPostsQuery(undefined, {
+        selectFromResult: result => ({
+            // We can optionally include the other metadata fields from the result here
+            ...result,
+            //that field includes filtered list of posts
+            postsForUserRTK: selectPostsForUserRTK(result, userId)
+        })
+    })
+
+
+
 
     const TimeAgo = (timestamp) => {
         let timeAgo = ''
@@ -37,7 +69,7 @@ export const UserPage = ({ route, navigation }) => {
             postId: post.id
         })
     }
-    
+
     const renderPosts = ({ item, index }) => {
         const timeAgoRender = TimeAgo(item.date)
 
@@ -65,6 +97,13 @@ export const UserPage = ({ route, navigation }) => {
             <Text>{user.name}</Text>
             <FlatList
                 data={postsForUser}
+                renderItem={renderPosts}
+                keyExtractor={item => item.id}
+            />
+
+            <Text>RTK POSTS</Text>
+            <FlatList
+                data={postsForUserRTK}
                 renderItem={renderPosts}
                 keyExtractor={item => item.id}
             />
