@@ -49,7 +49,7 @@ app.post("/getUsers", function (req, res) {
 
 
 app.post("/getPosts", function (req, res) {
-    console.log("posts req:",posts)
+   // console.log("posts req:",posts)
     res.send(JSON.stringify(posts));
 })
 
@@ -87,6 +87,18 @@ app.post("/addPost", function(req, res) {
     postToEdit.content = data.content
     console.log("afterUpdate:",posts)
     res.send(JSON.stringify(postToEdit));
+  });
+
+  app.post("/addReaction", function(req, res) {
+    var data = req.body
+    //console.log("addreaction:",data)
+    const postToEditRTK = posts.find(post=>post.id===data.postId)
+    if(postToEditRTK){
+        postToEditRTK.reactions[data.reaction]++
+    }
+    //const postToEdit = posts.find(post=>post.id===data.postId)
+  
+    res.send(JSON.stringify(postToEditRTK));
   });
 
 

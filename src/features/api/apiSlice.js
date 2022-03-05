@@ -63,6 +63,20 @@ export const apiSlice = createApi({
         // })
         //added injected endpoint in usersSlice.js
 
+        //POST_REACTIONS
+        addReaction: builder.mutation({
+            query: ({ postId, reaction }) => ({
+                url: '/addReaction',
+                method: 'POST',
+                // In a real app, we'd probably need to base this on user ID somehow
+                // so that a user can't do the same reaction more than once
+                body: { reaction,postId }
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Post', id: arg.postId }
+            ]
+        })
+
     })
 })
 
@@ -72,6 +86,6 @@ export const {
     useGetPostQuery,
     useAddNewPostMutation,
     useEditPostMutation,
-
-   // useGetUsersQuery, added injected endpoint in usersSlice.js
+    useAddReactionMutation,
+    // useGetUsersQuery, added injected endpoint in usersSlice.js
 } = apiSlice

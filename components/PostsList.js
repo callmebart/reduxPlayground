@@ -31,11 +31,13 @@ export const PostsList = (props) => {
         skip: false,
     })
 
+   
     const [addNewPostRTK, {/*parameters like isLoading*/ }] = useAddNewPostMutation()
     /*NOte 
         we can add refeth parameter in the consts declaration in useGetPostsQuery
         and pass it to by button click onPress=()=>{refetch} => annoying
     */
+
 
 
     const sortedPosts = useMemo(() => {
@@ -148,6 +150,7 @@ export const PostsList = (props) => {
                     ?<Text>{test.name}</Text>
                     :<Text>{test.nameRTK}</Text>
             }
+             <ReactionButtons post={test} />
         </TouchableOpacity>
     ))
     return (
