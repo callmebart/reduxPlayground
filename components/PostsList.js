@@ -105,7 +105,7 @@ export const PostsList = (props) => {
     }
 
     const selectUser = users.map(user => (
-        <TouchableOpacity key={user.id} style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 200, padding: 5 }} onPress={() => setUserId(user.id)} >
+        <TouchableOpacity key={user.id} style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 300, padding: 5 }} onPress={() => setUserId(user.id)} >
             <Text>{user.name}</Text>
         </TouchableOpacity>
     ))
@@ -144,7 +144,7 @@ export const PostsList = (props) => {
     }
 
     const poststest = sortedPosts.map(test => (
-        <TouchableOpacity key={test.id} style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 200, padding: 5 }} >
+        <TouchableOpacity key={test.id} style={{ borderWidth: 1, borderRadius: 5, margin: 5, width: 300, padding: 5 }} >
             {
                 test.name 
                     ?<Text>{test.name}</Text>
