@@ -76,27 +76,23 @@ export const apiSlice = createApi({
             // ],
             //instead of invalidesTags we can use onQueryStarted, 
             //we can update client side state and get the result of (reaction++) before it was refetched
-            // async onQueryStarted({ postId, reaction }, { dispatch, queryFulfilled }) {
-            //     // `updateQueryData` requires the endpoint name and cache key arguments,
-            //     // so it knows which piece of cache state to update
-            //     const patchResult = dispatch(
-            //       apiSlice.util.updateQueryData('getPosts', undefined, draft => {
-            //         // The `draft` is Immer-wrapped and can be "mutated" like in createSlice
-            //         const post = draft.find(post => post.id === postId)
-            //         if (post) {
-            //           post.reactions[reaction]++
-            //         }
-            //       })
-            //     )
-            //     try {
-            //       await queryFulfilled
-            //     } catch {
-            //       patchResult.undo()
-            //     }
-            //   },
-               invalidatesTags: (result, error, arg) => [
-                { type: 'Post', id: arg.postId }
-            ],
+            invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.postId }],
+            async onQueryStarted({ postId, reaction }, { dispatch, queryFulfilled }) {
+              const patchResult = dispatch(
+                apiSlice.util.updateQueryData('getPosts', undefined, (draft) => {
+                  const post = draft.find((post) => post.id === postId)
+                  if (post) {
+                    post.reactions[reaction]++
+                  }
+                })
+              )
+              try {
+                await queryFulfilled
+              } catch (err) {
+                patchResult.undo()
+              }
+            },
+            
         })
 
 
