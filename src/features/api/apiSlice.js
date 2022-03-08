@@ -96,7 +96,7 @@ export const apiSlice = createApi({
                     patchResult.undo()
                 }
             },
-            //pessimistic updates 
+            //pessimistic updates - the same as tags 
             // async onQueryStarted({ postId, reaction }, { dispatch, queryFulfilled }) {
             //     try {
             //         const { data: updatedPost } = await queryFulfilled
