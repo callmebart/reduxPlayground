@@ -85,7 +85,6 @@ export const apiSlice = createApi({
                         skip: false,
                     }, (draft) => {
                         const post = draft.find((post) => post.id === postId)
-                        console.log("test")
                         if (post) {
                             post.reactions[reaction]++
                         }
@@ -97,6 +96,25 @@ export const apiSlice = createApi({
                     patchResult.undo()
                 }
             },
+            //pessimistic updates 
+            // async onQueryStarted({ postId, reaction }, { dispatch, queryFulfilled }) {
+            //     try {
+            //         const { data: updatedPost } = await queryFulfilled
+            //         const patchResult = dispatch(
+            //             apiSlice.util.updateQueryData('getPosts', {
+            //                 pollingInterval: 3000,
+            //                 refetchOnMountOrArgChange: true,
+            //                 skip: false,
+            //             }, (draft) => {
+            //                 const post = draft.find((post) => post.id === postId)
+            //                 console.log("test")
+            //                 if (post) {
+            //                     post.reactions[reaction]++
+            //                 }
+            //             })
+            //         )
+            //     } catch { }
+            // },
 
         })
 
